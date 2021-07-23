@@ -1,0 +1,31 @@
+{
+    "__VERSION__": "2021-07-20 (PC 1.77.131.1030 / Mac: 1.77.131.1230) The Sims 4",
+    "version": "2021-07-20",
+    "builds": "ColonolNutty-Patreon",
+    "download_folder": "TS4.ModUpdater",
+    "default_mods_folder": "_cn_",
+    "version_info": {
+        "sims4communitylib": "S4CL"
+    },
+    "urls": {
+        "https://github.com/ColonolNutty/Sims4MiscMods/releases/download/v1.2-change-motives/ChangeMotives.v1.2.zip": "1057e2af8e6d8f980f8bebd367e62a5df83243582c1e6050aae5a6322ce06291",
+        "https://github.com/ColonolNutty/Sims4MiscMods/releases/download/v1.0-offer-blood/OfferBlood.v1.0.zip": "6072ee2636b6e12930934327563c6ebb76f8928bbdc4b17a4cedb1b16ad2999c",
+        "https://github.com/ColonolNutty/CustomGenderSettings/releases/download/v1.8/CustomGenderSettings.v1.8.zip": "9d0cd567b45c6b5750d4b9fe4608af69b7ccfb49d32ba8a49d3ca4354c67946e",
+        "https://github.com/ColonolNutty/CustomSliderFramework/releases/download/v1.10/CSF.v1.10.zip": "9aa8983490dc5e72df2278685fb0e0a85c267bca18af110a154a9388c3ed8e33",
+        "https://github.com/ColonolNutty/OutfitCustomization/releases/download/v1.2/OutfitCustomization.v1.2.zip": "def01f784d7701a823ee95baba4ad7832a2a81f72889c6c02520d0d4d2e64649",
+        "https://github.com/ColonolNutty/Sims4ControlMenu/releases/download/v1.1/sims4controlmenu.v1.1.zip": "b7c9b8b6b8cc92cb3a4ff872ebb9517d2a2c40194d10e83ba3dee8d7f9cd6e85",
+        "https://github.com/ColonolNutty/Sims4ModSettingsMenu/releases/download/v1.2/sims4modettingsmenu.v1.2.zip": "3b057fd9b4e723fe484a392a52de2247fb4ce9674a2edd8c23ec95177c365a36",
+        "https://github.com/ColonolNutty/Sims4CommunityLibrary/releases/download/v1.71/sims4communitylib.v1.71.zip": "35089719a58f99fa7824b25e86b23eb339ff013a5acbfd03687b53c2619f3518"
+    },
+    "ColonolNutty-Patreon": [
+        "ChangeMotives.v1.2.zip",
+        "OfferBlood.v1.0.zip",
+        "CustomGenderSettings.v1.8.zip",
+        "CSF.v1.10.zip",
+        "OutfitCustomization.v1.2.zip",
+        "sims4controlmenu.v1.1.zip",
+        "sims4modettingsmenu.v1.2.zip",
+        "s4autosavemod.ts4script",
+        "sims4communitylib.v1.71.zip"
+    ]
+}
