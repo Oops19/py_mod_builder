@@ -8,6 +8,7 @@ import ast
 import fnmatch
 import re
 import shutil
+from time import strftime
 from typing import Set
 
 import requests
@@ -23,30 +24,6 @@ import hashlib
 # Version updates: https://www.ea.com/de-de/games/the-sims/the-sims-4/update-notes
 # __VERSION__ will be added to the README, version will be appended to the mod name.
 from libraries.o19_version_handler import O19VersionHandler
-
-sample_cfg = {
-    "__VERSION__": "2021-06-29 (PC: 1.76.81.1020 / Mac: 1.76.81.1220) The Sims 4",
-    "version": "2021-06-29",
-    "download_folder": "TS4.ModUpdater",
-    "default_mods_dir": "_cn_",
-    'version_info': {
-        '"sims4communitylib": "S4CL"',
-    },
-    "urls": {
-        # Add a checksum to static URLs.
-        # To overwrite the 'default_mods_dir' append "#mods_dir" with mod_dir as the name for the directory within 'Mods'
-        "https://github.com/.../filename.zip": "SHA256SUM",
-        "https://cdn.discordapp.com/attachments/.../filename.zip": "SHA256SUM",
-        "https://www.simfileshare.net/download/.../?dl/filename.zip": "SHA256SUM",  # Add '?dl/filename.zip' to the URL
-        "https://mega.nz/file//.../filename.zip": "SHA256SUM",  # Add '/filename.zip' to the URL
-        "https://www.nexusmods.com/.../mods/.../filename.zip": "SHA256SUM",  # Not supported
-        # Other links with static URLs are also supported. Everything behind the last '/' is considered to be the filename. Append it to the URL if needed.
-        "https://....filename.zip": "SHA256SUM"
-    },
-    "builds": ["ColonolNutty-Patreon", "ColonolNutty-Patreon-Beta"],
-    "ColonolNutty-Patreon": ["filename.v1.69.zip" ],
-    "ColonolNutty-Patreon-Beta": ["filename.v1.70-beta1.zip" ],
-}
 
 tmp_directory = os.environ['tmp']
 
@@ -99,6 +76,13 @@ def strip_prefix(folder: str, pattern: str = 'prefix_'):
             shutil.move(os.path.join(root, filename), os.path.join(root, new_filename))
 
 
+def create_link(filename, url):
+    f = re.sub(r" ", "_", filename)
+    with open(f, 'w', encoding="utf8") as w:
+        w.write(f'[InternetShortcut]\n')
+        w.write(f'URL={url}')
+
+
 def main():
     parser = argparse.ArgumentParser(description='Download mods.')
     parser.add_argument('--cfg', metavar='build_mods.json', type=str, nargs=1,  default='build_mods.json', help='The configuration file.')
@@ -148,9 +132,12 @@ def main():
     release_directory = os.path.join(download_directory, 'release')
     os.makedirs(release_directory, exist_ok=True)
     shutil.rmtree(release_directory)
-    for build_name in config.get('builds'):
-        version_suffix = ""
+    for _id in config.get('builds'):
+        build_id = config.get('builds').get(_id)
+        build_name = build_id.get('name')
         print(f"Building '{build_name}' ...")
+
+        version_suffix = ""
         build_directory = os.path.join(release_directory, build_name)
 
         unzip_directory = os.path.join(download_directory, 'u')
@@ -177,7 +164,13 @@ def main():
                 print(f"ERROR: Can't process file '{filename}' (no idea which file type)!")
             mod_data_directory = os.path.join(unzip_directory, 'mod_data')
             if os.path.exists(mod_data_directory):  # Who would want to move it to 'The Sims 4/mod_data/'?
-                shutil.move(mod_data_directory, mods_directory)
+                try:
+                    # 1st mod_data folder can be moved
+                    shutil.move(mod_data_directory, mods_directory)
+                except:
+                    from distutils.dir_util import copy_tree
+                    copy_tree(mod_data_directory, os.path.join(mods_directory, 'mod_data'))
+                    shutil.rmtree(mod_data_directory)
             for f in get_packages(unzip_directory, '*.package'):
                 shutil.move(f, cn_scripts_directory)
             for f in get_packages(unzip_directory, '*.ts4script'):
@@ -195,7 +188,7 @@ def main():
 
             # Add a version suffix for mods which change more often than others
             v = ''
-            version_infos = config.get('version_info')
+            version_infos = build_id.get('version_info')
             for _file_name, _shortcut in version_infos.items():
                 if file.startswith(_file_name):
                     v = _shortcut
@@ -216,7 +209,11 @@ def main():
             with open(f"README.{build_name}.txt", encoding="utf8") as infile:
                 outfile.write(infile.read())
 
-        shutil.make_archive(os.path.join(release_directory, f"{build_name}_{config.get('version')}{version_suffix}"), 'zip', build_directory)
+        for url_name, url_addr in build_id.get('download_links').items():
+            create_link(os.path.join(build_directory, 'mod_documentation', url_name), url_addr)
+
+        build_date = strftime("%Y-%m-%d")
+        shutil.make_archive(os.path.join(release_directory, f"{build_name}_{build_date}{version_suffix}"), 'zip', build_directory)
 
 
 main()

@@ -68,7 +68,7 @@ If you use also other mods please check https://forums.thesims.com/en_US/categor
 ### Naming of the archive
 All name parts are separated with `_`
 The first part describes the author and the content (eg ColonolNully-Patreon).
-The second part is the date the supported TS4 version has been released (eg 2021-07-20). It`s the same for Win and Mac while the TS4 version is usually different.
+The second part is the build date (eg 2021-07-20) of the archive.
 For mods which often get updates a shortname and the version number may be appended.
 
 ### Sources
